@@ -6,6 +6,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -21,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -84,6 +86,20 @@ public class MainActivity extends AppCompatActivity {
         devListView = (ListView) findViewById(R.id.dev_list);
         assert devListView != null;
         devListView.setAdapter(devListAdapter);
+
+        devListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int pos, long id){
+                BluetoothDevice device = devList.get(pos);
+
+                new AlertDialog.Builder(MainActivity.this)
+                        .setTitle(device.getName() != null ? device.getName() : "null")
+                        .setMessage(device.getAddress())
+                        .setPositiveButton("OK",null)
+                        .show();
+            }
+        });
 
         btAdapter = BluetoothAdapter.getDefaultAdapter();
         if (btAdapter == null) {
